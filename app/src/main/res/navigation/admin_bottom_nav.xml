@@ -11,7 +11,7 @@
         android:label="fragment_food_list"
         tools:layout="@layout/fragment_food_list" />
     <fragment
-        android:id="@+id/accountFragment2"
+        android:id="@+id/accountFragment"
         android:name="com.android.fitlife.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />

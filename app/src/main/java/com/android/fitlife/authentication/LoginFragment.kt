@@ -1,3 +1,5 @@
+package com.android.fitlife.authentication
+
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle

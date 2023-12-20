@@ -17,7 +17,7 @@
         android:textStyle="bold"
         android:layout_marginVertical="32dp"
         android:textColor="@color/white"
-        android:text="Masuk"/>
+        android:text="Tambahkan Makanan"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:textColor="@color/light_gray"
-            android:hint="Kata Sandi"/>
+            android:hint="Kalori"/>
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:textColor="@color/light_gray"
-            android:hint="Kata Sandi"/>
+            android:hint="Jumlah"/>
 
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -79,8 +79,20 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:textColor="@color/light_gray"
-            android:hint="Kata Sandi"/>
+            android:hint="Satuan"/>
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_add_food"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Tambahkan"
+        android:textStyle="bold"
+        android:textColor="@color/gray"
+        android:background="@drawable/bg_button"
+        android:padding="16dp"/>
+
 
 </LinearLayout>

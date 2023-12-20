@@ -29,12 +29,12 @@ class SignUpFragment : Fragment() {
 
     private fun addRole(dataRole: DataRole){
         roleCollectionRef.add(dataRole).addOnFailureListener{
-            Log.d("MainActivity", "Error adding role : ")
+            Log.d("SignUp", "Error adding role : ")
         }
     }
     private fun addDataUser(dataUser: DataUser){
         dataUserCollectionRef.add(dataUser).addOnFailureListener{
-            Log.d("MainActivity", "Error adding data user : ")
+            Log.d("SignUp", "Error adding data user : ")
         }
     }
 
