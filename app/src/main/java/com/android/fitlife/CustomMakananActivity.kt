@@ -11,6 +11,9 @@ import com.android.fitlife.roomDb.DataHarianDao
 import com.android.fitlife.roomDb.DataHarianDatabase
 import com.github.ihermandev.formatwatcher.FormatWatcher
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.sql.Date
 import java.sql.Time
 import java.text.SimpleDateFormat
@@ -25,6 +28,8 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
     private lateinit var executorService: ExecutorService
     private lateinit var dataHarians: DataHarianDao
 
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomMakananBinding.inflate(layoutInflater)
@@ -34,6 +39,9 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
         val db = DataHarianDatabase.getDatabase(this)
         dataHarians = db!!.dataHarianDao()
 
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+
         with(binding) {
 
             edtTime.setOnClickListener {
@@ -42,6 +50,7 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
             }
 
             btnAddFood.setOnClickListener {
+                val uid = currentUser?.uid.toString()
                 val namaMakanan = edtNamaMakanan.text.toString()
                 val kalori = edtKaloriMakanan.text.toString()
                 val jumlah = edtJumlahMakanan.text.toString()
@@ -55,6 +64,7 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                     Toast.makeText(this@CustomMakananActivity, "Please fill all the fields", Toast.LENGTH_SHORT).show()
                 } else {
                     insertDataHarian(DataHarian(
+                        uid = uid,
                         namaMakanan = namaMakanan,
                         kalori = kalori.toFloat(),
                         jumlah = jumlah.toFloat(),
@@ -62,7 +72,7 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                         tanggal = tanggal,
                         waktu = waktu,
                     ))
-                    Toast.makeText(this@CustomMakananActivity, "Data inserted $namaMakanan $kalori $jumlah $satuan $waktu", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
         }

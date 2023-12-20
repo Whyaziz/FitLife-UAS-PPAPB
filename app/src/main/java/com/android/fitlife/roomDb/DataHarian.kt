@@ -11,6 +11,8 @@ data class DataHarian(
     @NonNull
     val id: Int = 0,
 
+    @ColumnInfo(name = "uid")
+    val uid: String,
     @ColumnInfo(name = "namaMakanan")
     val namaMakanan: String,
     @ColumnInfo(name = "kalori")

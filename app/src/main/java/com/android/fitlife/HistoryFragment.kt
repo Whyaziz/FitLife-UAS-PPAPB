@@ -2,6 +2,7 @@ package com.android.fitlife
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,9 @@ import com.android.fitlife.databinding.FragmentHistoryBinding
 import com.android.fitlife.roomDb.DataHarian
 import com.android.fitlife.roomDb.DataHarianDao
 import com.android.fitlife.roomDb.DataHarianDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -21,6 +25,8 @@ class HistoryFragment : Fragment() {
     private lateinit var executorService: ExecutorService
     private lateinit var dataHarians: DataHarianDao
     private lateinit var foodAdapter: MakananListAdapter
+
+    private lateinit var auth: FirebaseAuth
 
     private val dataMakananLiveData : MutableLiveData<List<DataHarian>>
             by lazy {
@@ -78,19 +84,30 @@ class HistoryFragment : Fragment() {
 
     private fun getAllData() {
         dataHarians.allDataHarian.observe(viewLifecycleOwner) { data ->
+
+            auth = Firebase.auth
+            val currentUserUid = auth.currentUser?.uid.toString()
+
             val dataList = mutableListOf<DataHarian>()
             for (document in data) {
-                val dataHarian = DataHarian(
-                    namaMakanan = document.namaMakanan,
-                    kalori = document.kalori,
-                    jumlah = document.jumlah,
-                    satuan = document.satuan,
-                    tanggal = document.tanggal,
-                    waktu = document.waktu
-                )
-                dataList.add(dataHarian)
+
+                if (currentUserUid == document.uid) {
+                    val dataHarian = DataHarian(
+                        uid = document.uid,
+                        namaMakanan = document.namaMakanan,
+                        kalori = document.kalori,
+                        jumlah = document.jumlah,
+                        satuan = document.satuan,
+                        tanggal = document.tanggal,
+                        waktu = document.waktu
+                    )
+                    dataList.add(dataHarian)
+                }
             }
+
+            Log.d("dataList", dataList.toString())
             foodAdapter.submitList(dataList)
         }
     }
+
 }

@@ -12,7 +12,10 @@ import com.android.fitlife.databinding.ActivityTambahMakananBinding
 import com.android.fitlife.roomDb.DataHarian
 import com.android.fitlife.roomDb.DataHarianDao
 import com.android.fitlife.roomDb.DataHarianDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -27,6 +30,7 @@ class TambahMakananActivity : AppCompatActivity() {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val roleCollectionRef = firestore.collection("data_makanan")
+    private lateinit var auth: FirebaseAuth
 
     private val dataMakananLiveData: MutableLiveData<List<DataMakanan>>
             by lazy {
@@ -49,8 +53,12 @@ class TambahMakananActivity : AppCompatActivity() {
             foodAdapter.submitList(data)
         }
 
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+
         foodAdapter = AddFromListAdapter(emptyList()) { selectedFood ->
 
+            val uid = currentUser?.uid.toString()
             val namaMakanan = selectedFood.namaMakanan
             val kalori = selectedFood.kalori
             val jumlah = selectedFood.jumlah
@@ -59,6 +67,7 @@ class TambahMakananActivity : AppCompatActivity() {
             val waktu = getTodayTime()
 
             val dataHarian = DataHarian(
+                uid = uid,
                 namaMakanan = namaMakanan,
                 kalori = kalori,
                 jumlah = jumlah,
