@@ -4,6 +4,8 @@ plugins {
 
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
+
+    id("kotlin-kapt")
 }
 
 android {
@@ -57,4 +59,10 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation("com.google.firebase:firebase-auth")
+
+    implementation("androidx.room:room-runtime:2.6.0")
+
+    implementation("io.github.ihermandev:format-watcher:1.0.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+
 }

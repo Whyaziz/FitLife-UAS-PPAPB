@@ -19,7 +19,7 @@
             android:text="tambah makanan"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reyceclyerview_makanan"
+            android:id="@+id/rv_makanan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

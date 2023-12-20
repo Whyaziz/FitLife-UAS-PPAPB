@@ -17,7 +17,7 @@ class AddFoodActivity : AppCompatActivity() {
 
     private fun addMakanan(dataMakanan: DataMakanan){
         dataMakananCollectionRef.add(dataMakanan).addOnFailureListener{
-            Log.d("AddFoodActivity", "Error adding role : ")
+            Log.d("AddFoodActivity", "Error adding food : ")
         }
     }
 
