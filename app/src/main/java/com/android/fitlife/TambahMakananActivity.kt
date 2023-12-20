@@ -138,6 +138,6 @@ class TambahMakananActivity : AppCompatActivity() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        return "$hour:$minute"
+        return String.format("%02d:%02d", hour, minute)
     }
 }
