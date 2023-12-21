@@ -70,7 +70,6 @@ class HistoryFragment : Fragment() {
         {selectedFood ->
 
             Log.d("selectedFood", selectedFood.toString())
-            deleteDataHarian(selectedFood)
 
         },{selectedFood -> val intent = Intent(requireContext(), EditActivity::class.java)
 
