@@ -113,8 +113,10 @@ class DashboardFragment : Fragment() {
                 Log.d("kalori_harian", document.getLong("kaloriHarian")?.toInt().toString())
 
                 DataUser(
+                    document.id,
                     document.getString("uid") ?: "",
                     document.getString("nama") ?: "",
+                    document.getString("gender")?: "",
                     document.getString("program") ?: "",
                     document.getLong("usia")?.toInt() ?: 0,
                     document.getLong("height")?.toFloat() ?: 0.0f,

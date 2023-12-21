@@ -101,6 +101,7 @@ class SignUpFragment : Fragment() {
                                 DataUser(
                                     uid = user?.uid.toString(),
                                     nama = nama,
+                                    gender = gender.toString(),
                                     usia = usia?: 0,
                                     program = program.toString(),
                                     height = height?: 0.0F,
