@@ -108,6 +108,7 @@ class TambahMakananActivity : AppCompatActivity() {
                 val dataList = mutableListOf<DataMakanan>()
                 for (document in result) {
                     val data = DataMakanan(
+                        document.id,
                         document.getString("namaMakanan") ?: "",
                         document.getLong("kalori")?.toFloat() ?: 0.0f,
                         document.getLong("jumlah")?.toFloat() ?: 0.0f,

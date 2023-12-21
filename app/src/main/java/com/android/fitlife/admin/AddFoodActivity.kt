@@ -36,7 +36,11 @@ class AddFoodActivity : AppCompatActivity() {
 
                 if (namaMakanan.isNotEmpty() && kalori.isNotEmpty() && jumlah.isNotEmpty() && satuan.isNotEmpty()) {
 
-                    val dataMakanan = DataMakanan(namaMakanan, kalori.toFloat(), jumlah.toFloat(), satuan)
+                    val dataMakanan = DataMakanan(
+                        namaMakanan =  namaMakanan,
+                        kalori = kalori.toFloat(),
+                        jumlah = jumlah.toFloat(),
+                        satuan = satuan)
                     addMakanan(dataMakanan)
 
                     val intent = Intent(this@AddFoodActivity, AdminActivity::class.java)

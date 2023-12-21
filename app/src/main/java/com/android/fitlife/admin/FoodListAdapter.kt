@@ -7,9 +7,14 @@ import com.android.fitlife.data.DataMakanan
 import com.android.fitlife.databinding.MakananListBinding
 
 typealias OnClickFood = (DataMakanan) -> Unit
+typealias OnClickEdit = (DataMakanan) -> Unit
+typealias OnClickDelete = (DataMakanan) -> Unit
 
-class FoodListAdapter(private var listFood: List<DataMakanan>, private val onClickFood: OnClickFood) :
-    RecyclerView.Adapter<FoodListAdapter.ItemFoodViewHolder>() {
+class FoodListAdapter(private var listFood: List<DataMakanan>,
+                      private val onClickFood: OnClickFood,
+                      private val onClickEdit: OnClickEdit,
+                      private val onClickDelete: OnClickDelete
+) : RecyclerView.Adapter<FoodListAdapter.ItemFoodViewHolder>() {
 
     inner class ItemFoodViewHolder(private val binding: MakananListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataMakanan) {
@@ -21,6 +26,14 @@ class FoodListAdapter(private var listFood: List<DataMakanan>, private val onCli
 
                 itemView.setOnClickListener {
                     onClickFood(data)
+                }
+
+                btnEditMakanan.setOnClickListener {
+                    onClickEdit(data)
+                }
+
+                btnDeleteMakanan.setOnClickListener {
+                    onClickDelete(data)
                 }
             }
         }

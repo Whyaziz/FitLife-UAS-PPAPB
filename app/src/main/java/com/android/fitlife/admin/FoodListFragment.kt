@@ -1,5 +1,6 @@
 package com.android.fitlife.admin
 
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.fitlife.R
 import com.android.fitlife.data.DataMakanan
 import com.android.fitlife.databinding.FragmentFoodListBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,7 +22,7 @@ class FoodListFragment : Fragment() {
     private lateinit var foodAdapter: FoodListAdapter
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val roleCollectionRef  = firestore.collection("data_makanan")
+    private val dataMakananCollectionRef  = firestore.collection("data_makanan")
 
     private val dataMakananLiveData : MutableLiveData<List<DataMakanan>>
             by lazy {
@@ -56,9 +56,36 @@ class FoodListFragment : Fragment() {
                 foodAdapter.submitList(data)
             }
 
-            foodAdapter = FoodListAdapter(emptyList()) { selectedFood ->
+            foodAdapter = FoodListAdapter(emptyList(),
+            { selectedFood ->
 
-            }
+            },
+            { selectedFood ->
+                val intent = Intent(activity, EditFoodActivity::class.java)
+
+                intent.putExtra("id", selectedFood.id)
+                intent.putExtra("namaMakanan", selectedFood.namaMakanan)
+                intent.putExtra("kalori", selectedFood.kalori.toString())
+                intent.putExtra("jumlah", selectedFood.jumlah.toString())
+                intent.putExtra("satuan", selectedFood.satuan)
+
+                startActivity(intent)
+                requireActivity().finish()
+            },
+            { selectedFood ->
+
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Konfirmasi Hapus")
+                    .setMessage("Apakah Anda yakin ingin menghapus data ini?")
+                    .setPositiveButton("Ya") { _, _ ->
+                        delete(selectedFood)
+                    }
+                    .setNegativeButton("Tidak") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
+
+            })
 
             rvFoodList.adapter = foodAdapter
             rvFoodList.layoutManager = LinearLayoutManager(requireContext())
@@ -74,11 +101,12 @@ class FoodListFragment : Fragment() {
     }
 
     private fun getAllData() {
-        roleCollectionRef.get()
+        dataMakananCollectionRef.get()
             .addOnSuccessListener { result ->
                 val dataList = mutableListOf<DataMakanan>()
                 for (document in result) {
                     val data = DataMakanan(
+                        document.id,
                         document.getString("namaMakanan") ?: "",
                         document.getLong("kalori")?.toFloat() ?: 0.0f,
                         document.getLong("jumlah")?.toFloat() ?: 0.0f,
@@ -86,11 +114,24 @@ class FoodListFragment : Fragment() {
                     )
                     dataList.add(data)
                     foodAdapter.submitList(dataList)
+
+                    Log.d(TAG, "${document.id} => ${document.data}")
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle failure
                 Log.e(TAG, "Error getting documents: ", exception)
             }
     }
+
+    private fun delete(dataMakanan: DataMakanan){
+
+        val id = dataMakanan.id
+
+        dataMakananCollectionRef.document(id).delete().addOnFailureListener {
+            Log.d("MainActivity", "Error deleting budget")
+        }
+        getAllData()
+    }
+
+
 }
