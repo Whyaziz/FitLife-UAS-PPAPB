@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.log
@@ -136,13 +137,14 @@ class HistoryFragment : Fragment() {
 
             auth = Firebase.auth
             val currentUserUid = auth.currentUser?.uid.toString()
+            val today = getTodayDate()
 
             val dataList = mutableListOf<DataHarian>()
             for (document in data) {
 
                 Log.d("data id", document.id.toString())
 
-                if (currentUserUid == document.token) {
+                if (currentUserUid == document.token && today == document.tanggal) {
                     val dataHarian = DataHarian(
                         id = document.id,
                         token = document.token,
@@ -168,5 +170,13 @@ class HistoryFragment : Fragment() {
         }
     }
 
+    fun getTodayDate(): String {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1 // Ingat, bulan dimulai dari 0
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return "$year-$month-$day"
+    }
 
 }
