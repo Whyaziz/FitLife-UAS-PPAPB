@@ -9,16 +9,12 @@ import com.android.fitlife.databinding.ActivityCustomMakananBinding
 import com.android.fitlife.roomDb.DataHarian
 import com.android.fitlife.roomDb.DataHarianDao
 import com.android.fitlife.roomDb.DataHarianDatabase
-import com.github.ihermandev.formatwatcher.FormatWatcher
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import java.sql.Date
-import java.sql.Time
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -58,20 +54,23 @@ class CustomMakananActivity : AppCompatActivity(), DatePickerDialog.OnDateSetLis
                 val tanggal = getTodayDate()
                 val waktu = edtTime.text.toString()
 
-                val timestamp = convertDateTimeToTimestamp(tanggal, waktu)
+//                val timestamp = convertDateTimeToTimestamp(tanggal, waktu)
 
                 if (namaMakanan.isEmpty() || kalori.isEmpty() || jumlah.isEmpty() || satuan.isEmpty() || waktu.isEmpty()) {
                     Toast.makeText(this@CustomMakananActivity, "Please fill all the fields", Toast.LENGTH_SHORT).show()
                 } else {
-                    insertDataHarian(DataHarian(
-                        uid = uid,
+
+                    val data = DataHarian(
+                        token = uid,
                         namaMakanan = namaMakanan,
                         kalori = kalori.toFloat(),
                         jumlah = jumlah.toFloat(),
                         satuan = satuan,
                         tanggal = tanggal,
                         waktu = waktu,
-                    ))
+                    )
+
+                    insertDataHarian(data)
                     finish()
                 }
             }

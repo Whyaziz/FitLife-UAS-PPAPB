@@ -1,5 +1,6 @@
 package com.android.fitlife
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.fitlife.databinding.FragmentHistoryBinding
@@ -16,8 +18,12 @@ import com.android.fitlife.roomDb.DataHarianDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.log
 
 class HistoryFragment : Fragment() {
 
@@ -27,6 +33,8 @@ class HistoryFragment : Fragment() {
     private lateinit var foodAdapter: MakananListAdapter
 
     private lateinit var auth: FirebaseAuth
+
+
 
     private val dataMakananLiveData : MutableLiveData<List<DataHarian>>
             by lazy {
@@ -57,9 +65,50 @@ class HistoryFragment : Fragment() {
 
         getAllData()
 
-        foodAdapter = MakananListAdapter(emptyList()) { selectedFood ->
+        foodAdapter = MakananListAdapter(emptyList(),
+        {selectedFood ->
 
-        }
+            Log.d("selectedFood", selectedFood.toString())
+            deleteDataHarian(selectedFood)
+
+        },{selectedFood -> val intent = Intent(requireContext(), EditActivity::class.java)
+
+                Log.d("id", selectedFood.id.toString())
+                Log.d("token", selectedFood.token)
+                Log.d("namaMakanan", selectedFood.namaMakanan)
+                Log.d("kalori", selectedFood.kalori.toString())
+                Log.d("jumlah", selectedFood.jumlah.toString())
+                Log.d("satuan", selectedFood.satuan)
+                Log.d("tanggal", selectedFood.tanggal)
+                Log.d("waktu", selectedFood.waktu)
+
+                intent.putExtra("id", selectedFood.id.toString())
+                intent.putExtra("token", selectedFood.token)
+                intent.putExtra("namaMakanan", selectedFood.namaMakanan)
+                intent.putExtra("kalori", selectedFood.kalori.toString())
+                intent.putExtra("jumlah", selectedFood.jumlah.toString())
+                intent.putExtra("satuan", selectedFood.satuan)
+                intent.putExtra("tanggal", selectedFood.tanggal)
+                intent.putExtra("waktu", selectedFood.waktu)
+
+                startActivity(intent)
+
+        },{selectedFood ->
+
+            Log.d("selectedFood", selectedFood.toString())
+
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Konfirmasi Hapus")
+                .setMessage("Apakah Anda yakin ingin menghapus data ini?")
+                .setPositiveButton("Ya") { _, _ ->
+                    deleteDataHarian(selectedFood)
+                }
+                .setNegativeButton("Tidak") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+
+        })
 
         dataMakananLiveData.observe(viewLifecycleOwner) { data ->
             foodAdapter.submitList(data)
@@ -91,9 +140,12 @@ class HistoryFragment : Fragment() {
             val dataList = mutableListOf<DataHarian>()
             for (document in data) {
 
-                if (currentUserUid == document.uid) {
+                Log.d("data id", document.id.toString())
+
+                if (currentUserUid == document.token) {
                     val dataHarian = DataHarian(
-                        uid = document.uid,
+                        id = document.id,
+                        token = document.token,
                         namaMakanan = document.namaMakanan,
                         kalori = document.kalori,
                         jumlah = document.jumlah,
@@ -109,5 +161,12 @@ class HistoryFragment : Fragment() {
             foodAdapter.submitList(dataList)
         }
     }
+
+    private fun deleteDataHarian(dataHarian: DataHarian) {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataHarians.delete(dataHarian)
+        }
+    }
+
 
 }

@@ -3,15 +3,21 @@ package com.android.fitlife
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.android.fitlife.databinding.MakananListBinding
+import com.android.fitlife.databinding.HistoryMakananListBinding
 import com.android.fitlife.roomDb.DataHarian
 
 typealias OnClickFood = (DataHarian) -> Unit
+typealias OnClickEdit = (DataHarian) -> Unit
+typealias OnClickDelete = (DataHarian) -> Unit
 
-class MakananListAdapter(private var listFood: List<DataHarian>, private val onClickFood: OnClickFood) :
+class MakananListAdapter(
+    private var listFood: List<DataHarian>,
+    private val onClickFood: OnClickFood,
+    private val onClickEdit: OnClickEdit,
+    private val onClickDelete: OnClickDelete) :
     RecyclerView.Adapter<MakananListAdapter.ItemFoodViewHolder>() {
 
-    inner class ItemFoodViewHolder(private val binding: MakananListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ItemFoodViewHolder(private val binding: HistoryMakananListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: DataHarian) {
             with(binding) {
                 txtNamaMakanan.text = data.namaMakanan
@@ -23,12 +29,20 @@ class MakananListAdapter(private var listFood: List<DataHarian>, private val onC
                 itemView.setOnClickListener {
                     onClickFood(data)
                 }
+
+                btnEditMakanan.setOnClickListener {
+                    onClickEdit(data)
+                }
+
+                btnDeleteMakanan.setOnClickListener {
+                    onClickDelete(data)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemFoodViewHolder {
-        val binding = MakananListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = HistoryMakananListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemFoodViewHolder(binding)
     }
 

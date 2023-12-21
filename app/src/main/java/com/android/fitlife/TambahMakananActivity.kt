@@ -16,6 +16,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -67,7 +70,7 @@ class TambahMakananActivity : AppCompatActivity() {
             val waktu = getTodayTime()
 
             val dataHarian = DataHarian(
-                uid = uid,
+                token = uid,
                 namaMakanan = namaMakanan,
                 kalori = kalori,
                 jumlah = jumlah,
@@ -80,6 +83,7 @@ class TambahMakananActivity : AppCompatActivity() {
 
             val intent = Intent(this@TambahMakananActivity, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
 
         binding.rvMakanan.adapter = foodAdapter
@@ -119,7 +123,7 @@ class TambahMakananActivity : AppCompatActivity() {
     }
 
     private fun insertDataHarian(dataHarian: DataHarian) {
-        executorService.execute {
+        CoroutineScope(Dispatchers.IO).launch {
             dataHarians.insert(dataHarian)
         }
     }

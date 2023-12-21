@@ -11,7 +11,7 @@ import androidx.room.Update
 @Dao
 interface DataHarianDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(dataHarian: DataHarian)
 
     @Update
@@ -20,7 +20,7 @@ interface DataHarianDao {
     @Delete
     fun delete(dataHarian: DataHarian)
 
-    @get:Query("SELECT * from puisi_table ORDER by id ASC")
+    @get:Query("SELECT * from data_harian_table ORDER by id ASC")
     val allDataHarian: LiveData<List<DataHarian>>
 
 }

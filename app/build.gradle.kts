@@ -61,8 +61,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     implementation("androidx.room:room-runtime:2.6.0")
-
-    implementation("io.github.ihermandev:format-watcher:1.0.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.0")
 
 }
