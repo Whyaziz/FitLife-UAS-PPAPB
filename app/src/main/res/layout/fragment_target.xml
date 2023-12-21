@@ -138,6 +138,16 @@
                    android:hint="Tinggi Badan"
                    android:background="@drawable/bg_spinner"/>
                <EditText
+                   android:id="@+id/edt_kalori_harian"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:textColorHint="@color/white"
+                   android:layout_marginVertical="8dp"
+                   android:padding="16dp"
+                   android:inputType="number"
+                   android:hint="Target Kalori Harian"
+                   android:background="@drawable/bg_spinner"/>
+               <EditText
                    android:id="@+id/edt_target_weight"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"

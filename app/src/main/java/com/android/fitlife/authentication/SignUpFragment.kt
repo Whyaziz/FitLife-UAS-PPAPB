@@ -69,10 +69,10 @@ class SignUpFragment : Fragment() {
         val weight = arguments?.getFloat("WEIGHT")
         val height = arguments?.getFloat("HEIGHT")
         val targetWeight = arguments?.getFloat("TARGET_WEIGHT")
+        val kaloriHarian = arguments?.getInt("KALORI_HARIAN")
 
         val logMessage =
-            "Received Data: Program=$program, Gender=$gender, Usia=$usia, " +
-                    "Weight=$weight, Height=$height, Target Weight=$targetWeight"
+            "Received Data: Program=$program, Gender=$gender, Usia=$usia, Weight=$weight, Height=$height, Target Weight=$targetWeight kaloriHarian=$kaloriHarian"
         Log.d("SignUpFragment", logMessage)
 
         binding.btnDaftar.setOnClickListener {
@@ -106,6 +106,7 @@ class SignUpFragment : Fragment() {
                                     height = height?: 0.0F,
                                     weight = weight?: 0.0F,
                                     targetWeight = targetWeight?: 0.0F,
+                                    kaloriHarian = kaloriHarian?: 0
                                 )
                             )
 

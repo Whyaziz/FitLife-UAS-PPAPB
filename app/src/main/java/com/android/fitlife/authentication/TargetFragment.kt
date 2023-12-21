@@ -58,6 +58,7 @@ class TargetFragment : Fragment() {
         val weight = binding.edtWeight.text.toString().toFloat()
         val height = binding.edtHeight.text.toString().toFloat()
         val targetWeight = binding.edtTargetWeight.text.toString().toFloat()
+        val kaloriHarian = binding.edtKaloriHarian.text.toString().toInt()
 
 
         val bundle = Bundle().apply {
@@ -67,6 +68,7 @@ class TargetFragment : Fragment() {
             putFloat("WEIGHT", weight)
             putFloat("HEIGHT", height)
             putFloat("TARGET_WEIGHT", targetWeight)
+            putInt("KALORI_HARIAN", kaloriHarian)
         }
 
         val signUpFragment = SignUpFragment()

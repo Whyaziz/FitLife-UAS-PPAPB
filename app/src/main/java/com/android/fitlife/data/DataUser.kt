@@ -8,4 +8,5 @@ data class DataUser(
     var height: Float = 0.0F,
     var weight: Float = 0.0F,
     var targetWeight: Float = 0.0F,
+    var kaloriHarian: Int = 0,
 )
