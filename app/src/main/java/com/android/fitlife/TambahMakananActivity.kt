@@ -4,7 +4,10 @@ import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.fitlife.data.DataMakanan
@@ -51,6 +54,23 @@ class TambahMakananActivity : AppCompatActivity() {
         dataHarians = db!!.dataHarianDao()
 
         getAllData()
+
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(charSequence: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                val searchText = editable.toString().trim()
+
+                fetchDataAndObserve(searchText)
+            }
+        })
+
 
         dataMakananLiveData.observe(this@TambahMakananActivity) { data ->
             foodAdapter.submitList(data)
@@ -144,5 +164,43 @@ class TambahMakananActivity : AppCompatActivity() {
         val minute = calendar.get(Calendar.MINUTE)
 
         return String.format("%02d:%02d", hour, minute)
+    }
+
+    private fun fetchDataAndObserve(searchQuery: String = "") {
+        try {
+            val makananCollection = firestore.collection("data_makanan")
+
+            // Add a condition to filter data based on the search query
+            val query = if (searchQuery.isNotEmpty()) {
+
+                makananCollection.whereGreaterThanOrEqualTo("namaMakanan", searchQuery)
+                    .whereLessThanOrEqualTo("namaMakanan", searchQuery + "\uf8ff")
+            } else {
+                makananCollection
+            }
+
+            // Observe Firestore changes
+            query.addSnapshotListener { snapshot, exception ->
+                if (exception != null) {
+                    Toast.makeText(this@TambahMakananActivity, exception.message, Toast.LENGTH_LONG).show()
+                    return@addSnapshotListener
+                }
+
+                snapshot?.let { documents ->
+                    val makanans = mutableListOf<DataMakanan>()
+                    for (document in documents) {
+                        val bukuId = document.id
+                        val makanan = document.toObject(DataMakanan::class.java).copy(id = bukuId)
+                        makanans.add(makanan)
+                    }
+
+                    // Update the UI with the Firestore data
+                    foodAdapter.submitList(makanans)
+                }
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this@TambahMakananActivity, e.message, Toast.LENGTH_LONG).show()
+            Log.d("ERRORKU", e.toString())
+        }
     }
 }
