@@ -1,5 +1,6 @@
 package com.android.fitlife
 
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -84,9 +85,12 @@ class DashboardFragment : Fragment() {
                     sisaKalori.text = (totalCalories - consumedCalories).toString()
                     progressCircularIndicator.setProgress(progress.toInt(), true)
 
+                    if(isAfter6PM()&&progress<60){
+                        (requireActivity() as MainActivity).createNotification()
+                    }
+
                     Log.d("dataHarian", dataHarianLiveData.value.toString())
                     Log.d("dataUser", dataUserLiveData.value.toString())
-
                     Log.d("consumedCalories", consumedCalories.toString())
                     Log.d("totalCalories", totalCalories.toString())
                 }
@@ -171,5 +175,11 @@ class DashboardFragment : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         return "$year-$month-$day"
+    }
+
+    private fun isAfter6PM(): Boolean {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        return hour >= 18 // 6 PM
     }
 }
